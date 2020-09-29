@@ -42,7 +42,7 @@ export async function createAuthor({ fname, lname }: IAuthor) {
     return author;
 }
 
-export async function updateBook(id: string, { fname, lname }: IAuthor) {
+export async function updateAuthor(id: string, { fname, lname }: IAuthor) {
     if (!AUTHORS.has(id)) {
         return null;
     }

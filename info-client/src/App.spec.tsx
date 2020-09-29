@@ -4,7 +4,7 @@ import App from './App'
 import { getCards } from './services/cardService'
 import { IBooks } from './models/books.model'
 
-jest.mock('./services/cardService');
+const mockFn = jest.mock('./services/cardService');
 
 
 it('Renders cards from the API', async () => {

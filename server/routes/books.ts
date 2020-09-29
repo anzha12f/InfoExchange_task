@@ -1,4 +1,5 @@
 import * as Book from '../model/book';
+import * as Author from '../model/author';
 
 export function getBooksList(req: any, res: any) {
   let { sort } = req.query;
@@ -17,17 +18,29 @@ export function getBookId(req: any, res: any) {
 }
 
 export function getAuthorsList(req: any, res: any) {
-  res.json([]);
+  let { sort } = req.query;
+  sort = sort ? sort.toLowerCase() : "desc";
+  if (!(sort === "asc" || sort === "desc")) {
+    return res.status(400).send("Invalid sort Params");
+  }
+  const authors = Author.getAuthors(sort);
+  res.json({ authors });
 }
 
 export function getAuthor(req: any, res: any) {
-  res.json([]);
+  const { id } = req.params;
+  const author = Author.getAuthor(id);
+  res.json({ author });
 }
 
-export function addAuthor(req: any, res: any) {
-  const { author } = req.body;
-  console.log(`Add author ${author} in database`);
-  res.send("OK");
+export async function addAuthor(req: any, res: any) {
+  const { fname, lname } = req.body;
+  if (fname === undefined || lname === undefined) {
+    return res.status(400).send("Missing name");
+  }
+  const author = await Author.createAuthor({ fname, lname });
+  console.log({ author });
+  res.send({ author });
 }
 
 
@@ -41,11 +54,15 @@ export async function addBook(req: any, res: any) {
   res.send({ book });
 }
 
-export function editAuthor(req: any, res: any) {
+export async function editAuthor(req: any, res: any) {
   const { id } = req.params;
-  const { author } = req.body;
-  console.log(`Edit Author ${author} in database`);
-  res.send({ status: 'OK' });
+  const { fname, lname } = req.body;
+  if (fname === undefined || lname === undefined) {
+    return res.status(400).send("Missing  name");
+  }
+  const author = await Author.updateAuthor(id, { fname, lname });
+  console.log({ author });
+  res.send({ author });
 }
 
 export async function editBook(req: any, res: any) {

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateBook = exports.createAuthor = exports.getAuthor = exports.getAuthors = void 0;
+exports.updateAuthor = exports.createAuthor = exports.getAuthor = exports.getAuthors = void 0;
 const uuid_1 = require("uuid");
 // class Author(Model):
 //     first_name = models.TextField()
@@ -53,7 +53,7 @@ function createAuthor({ fname, lname }) {
     });
 }
 exports.createAuthor = createAuthor;
-function updateBook(id, { fname, lname }) {
+function updateAuthor(id, { fname, lname }) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!AUTHORS.has(id)) {
             return null;
@@ -65,4 +65,4 @@ function updateBook(id, { fname, lname }) {
         return Object.assign({}, author);
     });
 }
-exports.updateBook = updateBook;
+exports.updateAuthor = updateAuthor;

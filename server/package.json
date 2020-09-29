@@ -48,7 +48,10 @@
         "diagnostics": true
       }
     },
-    "testPathIgnorePatterns": [".d.ts", ".js"],
+    "testPathIgnorePatterns": [
+      ".d.ts",
+      ".js"
+    ],
     "testMatch": [
       "**/__tests__/*.+(ts|tsx|js)"
     ]

@@ -1,17 +1,17 @@
 import React from 'react';
-import { saveCard } from '../services/cardService';
+import { saveACard } from '../services/cardService';
 
-export function AuthorCardForm({ onSave, onCancel, card }: any) {
-    const id = card && card.id ? card.id : undefined;
+export function AuthorCardForm({ onAuthorSave, onCancel, acard }: any) {
+    const id = acard && acard.id ? acard.id : undefined;
 
-    const [fname, setFname] = React.useState(id ? card.fname : '');
-    const [lname, setLname] = React.useState(id ? card.lname : '');
+    const [fname, setFname] = React.useState(id ? acard.fname : '');
+    const [lname, setLname] = React.useState(id ? acard.lname : '');
 
     function handleSubmit(event: any) {
         event.preventDefault()
-        saveCard({ id, fname, lname }).then((card: any) => {
+        saveACard({ id, fname, lname }).then((acard: any) => {
             clearForm()
-            // onSave && typeof onSave === 'function' && onSave(card)
+            onAuthorSave && typeof onAuthorSave === 'function' && onAuthorSave(acard)
         })
     }
 

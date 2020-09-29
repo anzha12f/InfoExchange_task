@@ -30,6 +30,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.editBook = exports.editAuthor = exports.addBook = exports.addAuthor = exports.getAuthor = exports.getAuthorsList = exports.getBookId = exports.getBooksList = void 0;
 const Book = __importStar(require("../model/book"));
+const Author = __importStar(require("../model/author"));
 function getBooksList(req, res) {
     let { sort } = req.query;
     sort = sort ? sort.toLowerCase() : "desc";
@@ -47,17 +48,31 @@ function getBookId(req, res) {
 }
 exports.getBookId = getBookId;
 function getAuthorsList(req, res) {
-    res.json([]);
+    let { sort } = req.query;
+    sort = sort ? sort.toLowerCase() : "desc";
+    if (!(sort === "asc" || sort === "desc")) {
+        return res.status(400).send("Invalid sort Params");
+    }
+    const authors = Author.getAuthors(sort);
+    res.json({ authors });
 }
 exports.getAuthorsList = getAuthorsList;
 function getAuthor(req, res) {
-    res.json([]);
+    const { id } = req.params;
+    const author = Author.getAuthor(id);
+    res.json({ author });
 }
 exports.getAuthor = getAuthor;
 function addAuthor(req, res) {
-    const { author } = req.body;
-    console.log(`Add author ${author} in database`);
-    res.send("OK");
+    return __awaiter(this, void 0, void 0, function* () {
+        const { fname, lname } = req.body;
+        if (fname === undefined || lname === undefined) {
+            return res.status(400).send("Missing name");
+        }
+        const author = yield Author.createAuthor({ fname, lname });
+        console.log({ author });
+        res.send({ author });
+    });
 }
 exports.addAuthor = addAuthor;
 function addBook(req, res) {
@@ -68,15 +83,21 @@ function addBook(req, res) {
         }
         const book = yield Book.createBook({ isbn, name, author });
         console.log({ book });
-        res.send("ok");
+        res.send({ book });
     });
 }
 exports.addBook = addBook;
 function editAuthor(req, res) {
-    const { id } = req.params;
-    const { author } = req.body;
-    console.log(`Edit Author ${author} in database`);
-    res.send("OK");
+    return __awaiter(this, void 0, void 0, function* () {
+        const { id } = req.params;
+        const { fname, lname } = req.body;
+        if (fname === undefined || lname === undefined) {
+            return res.status(400).send("Missing  name");
+        }
+        const author = yield Author.updateAuthor(id, { fname, lname });
+        console.log({ author });
+        res.send({ author });
+    });
 }
 exports.editAuthor = editAuthor;
 function editBook(req, res) {
@@ -88,7 +109,7 @@ function editBook(req, res) {
         }
         const book = yield Book.updateBook(id, { isbn, name, author });
         console.log({ book });
-        res.send("ok");
+        res.send({ book });
     });
 }
 exports.editBook = editBook;
