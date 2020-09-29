@@ -57,7 +57,7 @@ function App() {
         <h3>Book Cards </h3>
         <div className="gridContainer">
           <BookCardForm onSave={handleAdd} />
-          <AuthorCardForm onAuthorSave={handleAuthorAdd} />
+          <AuthorCardForm acards={acards} onAuthorSave={handleAuthorAdd} />
           {cards.map(card => (
             <CardPreview
               key={card.id}

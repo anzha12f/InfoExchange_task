@@ -1,16 +1,23 @@
 import React from 'react';
+import { IAuthors } from '../models/authors.model';
 import { saveACard } from '../services/cardService';
 
-export function AuthorCardForm({ onAuthorSave, onCancel, acard }: any) {
-    const id = acard && acard.id ? acard.id : undefined;
+export function AuthorCardForm({ onAuthorSave, onCancel, acard, acards }: any) {
+    console.log('value of acard', acard);
+    //let id = acard && acard.id ? acard.id : undefined;
+    const [id, setId] = React.useState('');
+    const [fname, setFname] = React.useState('');
+    const [lname, setLname] = React.useState('');
+    const [isEditMode, setIsEditMode] = React.useState(false);
 
-    const [fname, setFname] = React.useState(id ? acard.fname : '');
-    const [lname, setLname] = React.useState(id ? acard.lname : '');
+
 
     function handleSubmit(event: any) {
-        event.preventDefault()
+        event.preventDefault();
+        console.log('P1....', id);
         saveACard({ id, fname, lname }).then((acard: any) => {
-            clearForm()
+            clearForm();
+            setIsEditMode(false);
             onAuthorSave && typeof onAuthorSave === 'function' && onAuthorSave(acard)
         })
     }
@@ -23,17 +30,34 @@ export function AuthorCardForm({ onAuthorSave, onCancel, acard }: any) {
 
     function handleFnameChange(event: any) {
         const { value } = event.target;
-        setFname(value);
+        const value1 = findValue(value);
+        setIsEditMode(value1 ? true : false);
+        setFname(value1 ? value1.fname : value);
+        setLname(value1 ? value1.lname : '');
+        setId(value1 ? value1.id : '');
     }
     function handleLnameChange(event: any) {
         const { value } = event.target;
         setLname(value);
     }
 
+    function findValue(value: string): IAuthors | undefined {
+
+        const existName = acards.find((c: IAuthors) => c.fname === value);
+        if (existName) {
+            return existName;
+        }
+        return undefined;
+    }
+
+
     return (
         <div className="tile">
             <h4>{id ? 'Update Author' : 'Add Author'}</h4>
             <form onReset={clearForm} onSubmit={handleSubmit}>
+                <div>
+                    {isEditMode ? <b>Edit Mode</b> : <b>Insert Mode</b>}
+                </div>
                 <div>
                     <label htmlFor="author_fname">fname</label>
                     <input id="author_fname" type="text" value={fname} onChange={handleFnameChange} />
