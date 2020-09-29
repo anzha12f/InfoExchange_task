@@ -51,7 +51,7 @@ function App() {
         <h1>
           Info<span className="titleHighlite">Exchange</span>
         </h1>
-        <h2>Book Management software</h2>
+        <h2>Book Management system</h2>
       </header>
       <main>
         <h3>Book Cards </h3>
